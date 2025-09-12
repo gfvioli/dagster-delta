@@ -136,7 +136,7 @@ class MultiTimePartitionsChecker:
             len(
                 {
                     pdi(self.start).add(hours=self.hourly_delta * i)
-                    for i in range(date_diff(self.start, self.end).in_days() + 1)
+                    for i in range(len(self._partitions) + 1)
                 }
                 - {pdi(d.start) for d in self._partitions},
             )
