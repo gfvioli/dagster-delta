@@ -8,7 +8,7 @@ from typing import Any, Optional, TypedDict, Union, cast
 
 from dagster import InputContext, OutputContext
 from dagster._config.pythonic_config import ConfigurableIOManagerFactory
-from dagster._core.definitions.time_window_partitions import TimeWindow
+from dagster._core.definitions.partitions.utils import TimeWindow
 from dagster._core.storage.db_io_manager import (
     DbClient,
     DbTypeHandler,
@@ -255,7 +255,7 @@ class DeltaLakeDbClient(DbClient):  # noqa: D101
         elif "azure" in storage_options:
             storage_options = AzureConfig(**storage_options["azure"])  # type: ignore
         elif "gcs" in storage_options:
-            storage_options = GcsConfig(storage_options["gcs"])  # type: ignore
+            storage_options = GcsConfig(**storage_options["gcs"])  # type: ignore
         else:
             raise NotImplementedError("No valid storage_options config found.")
 
