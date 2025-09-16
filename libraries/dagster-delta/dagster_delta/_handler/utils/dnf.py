@@ -85,8 +85,8 @@ def _value_dnf(
             start_dt = min(start_dts)
             end_dt = max(end_dts)
         else:
-            start_dt = table_partition.partitions.start
-            end_dt = table_partition.partitions.end
+            start_dt = table_partition.partitions.start  # type: ignore[attr-defined]
+            end_dt = table_partition.partitions.end  # type: ignore[attr-defined]
 
         start_dt = start_dt.strftime(date_format)
         end_dt = end_dt.strftime(date_format)

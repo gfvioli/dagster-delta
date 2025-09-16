@@ -70,7 +70,7 @@ def extract_date_format_from_partition_definition(
                         raise ValueError(
                             f"Partition_expr mapping is invalid. Partition_dimension :{partition_dims_definition.name} not found in partition_expr: {partition_expr}.",
                         )
-                    date_format[partition_expr_name] = partition_dims_definition.partitions_def.fmt
+                    date_format[partition_expr_name] = partition_dims_definition.partitions_def.fmt  # type: ignore[attr-defined]
         else:
             raise ValueError(
                 "MultiPartitionsDefinition provided, so partion_expr needs to be a dictionary mapping of {dimension: column}",
