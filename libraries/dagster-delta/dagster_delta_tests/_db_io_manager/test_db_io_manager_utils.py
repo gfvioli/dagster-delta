@@ -44,27 +44,115 @@ def daily_partitions_time_window_not_consecutive() -> list[TimeWindow]:
     ]
 
 
-def test_multi_time_partitions_checker_consecutive(
+@pytest.fixture
+def hourly_partitions_time_window_consecutive() -> list[TimeWindow]:
+    return [
+        TimeWindow(
+            start=dt.datetime(2022, 1, 1, 1),
+            end=dt.datetime(2022, 1, 1, 2),
+        ),
+        TimeWindow(
+            start=dt.datetime(2022, 1, 1, 2),
+            end=dt.datetime(2022, 1, 1, 3),
+        ),
+        TimeWindow(
+            start=dt.datetime(2022, 1, 1, 3),
+            end=dt.datetime(2022, 1, 1, 4),
+        ),
+    ]
+
+
+@pytest.fixture
+def hourly_partitions_time_window_not_consecutive() -> list[TimeWindow]:
+    return [
+        TimeWindow(
+            start=dt.datetime(2022, 1, 1, 1),
+            end=dt.datetime(2022, 1, 1, 2),
+        ),
+        TimeWindow(
+            start=dt.datetime(2022, 1, 1, 2),
+            end=dt.datetime(2022, 1, 1, 3),
+        ),
+        TimeWindow(
+            start=dt.datetime(2022, 1, 1, 4),
+            end=dt.datetime(2022, 1, 1, 5),
+        ),
+    ]
+
+
+# NB: The MonthlyPartitionDefinition in dagster will orchestrate the partitions into separate jobs to avoid issues with different month duration in hours so we only need to check a single month at a time. We need to check a single month doesn't collide witht the code like in the case of PR #20
+@pytest.fixture
+def monthly_partitions_time_window() -> list[TimeWindow]:
+    return [
+        TimeWindow(
+            start=dt.datetime(2022, 1, 1, 0),
+            end=dt.datetime(2022, 2, 1, 0),
+        ),
+    ]
+
+
+def test_multi_time_partitions_monthly_checker(
+    monthly_partitions_time_window: list[TimeWindow],
+):
+    checker = utils.MultiTimePartitionsChecker(
+        partitions=monthly_partitions_time_window,
+    )
+
+    assert checker.hourly_delta == 744
+    assert checker.start == dt.datetime(2022, 1, 1, 0)
+    assert checker.end == dt.datetime(2022, 2, 1, 0)
+    assert checker.is_consecutive()
+
+
+def test_multi_time_partitions_daily_checker_consecutive(
     daily_partitions_time_window_consecutive: list[TimeWindow],
 ):
     checker = utils.MultiTimePartitionsChecker(
         partitions=daily_partitions_time_window_consecutive,
     )
+
+    assert checker.hourly_delta == 24
     assert checker.start == dt.datetime(2022, 1, 1, 0)
     assert checker.end == dt.datetime(2022, 1, 4, 0)
-    assert checker.hourly_delta == 24
     assert checker.is_consecutive()
 
 
-def test_multi_time_partitions_checker_non_consecutive(
+def test_multi_time_partitions_daily_checker_non_consecutive(
     daily_partitions_time_window_not_consecutive: list[TimeWindow],
 ):
     checker = utils.MultiTimePartitionsChecker(
         partitions=daily_partitions_time_window_not_consecutive,
     )
+
     assert checker.hourly_delta == 24
     assert checker.start == dt.datetime(2022, 1, 1, 0)
     assert checker.end == dt.datetime(2022, 1, 5, 0)
+    assert not checker.is_consecutive()
+
+
+def test_multi_time_partitions_hourly_checker_consecutive(
+    hourly_partitions_time_window_consecutive: list[TimeWindow],
+):
+    checker = utils.MultiTimePartitionsChecker(
+        partitions=hourly_partitions_time_window_consecutive,
+    )
+
+    assert checker.hourly_delta == 1
+    assert checker.start == dt.datetime(2022, 1, 1, 1)
+    assert checker.end == dt.datetime(2022, 1, 1, 4)
+    assert checker.is_consecutive()
+
+
+def test_multi_time_partitions_hourly_checker_non_consecutive(
+    hourly_partitions_time_window_not_consecutive: list[TimeWindow],
+):
+    checker = utils.MultiTimePartitionsChecker(
+        partitions=hourly_partitions_time_window_not_consecutive,
+    )
+
+    assert checker.hourly_delta == 1
+    assert checker.start == dt.datetime(2022, 1, 1, 1)
+    assert checker.end == dt.datetime(2022, 1, 1, 5)
     assert not checker.is_consecutive()
 
 
