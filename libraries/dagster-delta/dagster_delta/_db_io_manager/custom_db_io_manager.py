@@ -5,12 +5,21 @@ from typing import (
     cast,
 )
 
-from dagster._core.definitions.partitions.definition.multi import (
-    MultiPartitionsDefinition,
-)
-from dagster._core.definitions.partitions.definition.time_window import (
-    TimeWindowPartitionsDefinition,
-)
+try:
+    from dagster._core.definitions.partitions.definition.multi import (
+        MultiPartitionsDefinition,
+    )
+    from dagster._core.definitions.partitions.definition.time_window import (
+        TimeWindowPartitionsDefinition,
+    )
+except ImportError:
+    from dagster._core.definitions.multi_dimensional_partitions import (
+        MultiPartitionsDefinition,
+    )
+    from dagster._core.definitions.time_window_partitions import (
+        TimeWindowPartitionsDefinition,
+    )
+
 from dagster._core.execution.context.input import InputContext
 from dagster._core.execution.context.output import OutputContext
 from dagster._core.storage.db_io_manager import DbIOManager, TablePartitionDimension, TableSlice

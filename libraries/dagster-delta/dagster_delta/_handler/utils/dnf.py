@@ -1,9 +1,15 @@
 from collections.abc import Iterable, Sequence
 from typing import Optional, Union, cast
 
-from dagster._core.definitions.partitions.utils import (
-    TimeWindow,
-)
+try:
+    from dagster._core.definitions.partitions.utils import (
+        TimeWindow,
+    )
+except ImportError:
+    from dagster._core.definitions.time_window_partitions import (
+        TimeWindow,
+    )
+
 from dagster._core.storage.db_io_manager import TablePartitionDimension
 from deltalake.schema import Field as DeltaField
 from deltalake.schema import PrimitiveType, Schema

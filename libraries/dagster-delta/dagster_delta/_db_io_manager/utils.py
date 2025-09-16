@@ -10,7 +10,12 @@ from dagster import (
     MultiPartitionsDefinition,
     TimeWindowPartitionsDefinition,
 )
-from dagster._core.definitions.partitions.utils import TimeWindow
+
+try:
+    from dagster._core.definitions.partitions.utils import TimeWindow
+except ImportError:
+    from dagster._core.definitions.time_window_partitions import TimeWindow
+
 from dagster._core.storage.db_io_manager import TablePartitionDimension
 from pendulum import instance as pdi
 

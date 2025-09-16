@@ -5,9 +5,15 @@ from dagster import (
     MultiPartitionsDefinition,
     OutputContext,
 )
-from dagster._core.definitions.partitions.definition.time_window import (
-    TimeWindowPartitionsDefinition,
-)
+
+try:
+    from dagster._core.definitions.partitions.definition.time_window import (
+        TimeWindowPartitionsDefinition,
+    )
+except ImportError:
+    from dagster._core.definitions.time_window_partitions import (
+        TimeWindowPartitionsDefinition,
+    )
 
 
 def extract_date_format_from_partition_definition(
