@@ -13,7 +13,7 @@ from dagster import (
 
 try:
     from dagster._core.definitions.partitions.utils import TimeWindow
-except ImportError:
+except ModuleNotFoundError:
     from dagster._core.definitions.time_window_partitions import TimeWindow
 
 from dagster._core.storage.db_io_manager import TablePartitionDimension

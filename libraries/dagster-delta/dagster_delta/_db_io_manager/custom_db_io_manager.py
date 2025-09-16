@@ -12,7 +12,7 @@ try:
     from dagster._core.definitions.partitions.definition.time_window import (
         TimeWindowPartitionsDefinition,
     )
-except ImportError:
+except ModuleNotFoundError:
     from dagster._core.definitions.multi_dimensional_partitions import (
         MultiPartitionsDefinition,
     )

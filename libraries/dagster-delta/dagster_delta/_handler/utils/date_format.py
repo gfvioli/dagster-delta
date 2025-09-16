@@ -10,7 +10,7 @@ try:
     from dagster._core.definitions.partitions.definition.time_window import (
         TimeWindowPartitionsDefinition,
     )
-except ImportError:
+except ModuleNotFoundError:
     from dagster._core.definitions.time_window_partitions import (
         TimeWindowPartitionsDefinition,
     )
