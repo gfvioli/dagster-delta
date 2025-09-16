@@ -138,11 +138,8 @@ class MultiTimePartitionsChecker:
 
     def is_consecutive(self) -> bool:
         """Checks whether the provided start dates of each partition timewindow is consecutive"""
-        total_hours = date_diff(self.start, self.end).in_hours()
-        num_steps = int(total_hours / self.hourly_delta)
-
         expected_starts = {
-            pdi(self.start).add(hours=self.hourly_delta * i) for i in range(num_steps)
+            pdi(self.start).add(hours=self.hourly_delta * i) for i in range(len(set(self._partitions)))
         }
 
         actual_starts = {pdi(d.start) for d in self._partitions}
