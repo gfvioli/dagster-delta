@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Union
 
 import polars as pl
 from dagster import (
@@ -10,6 +11,8 @@ from dagster import (
 from pydantic import ConfigDict
 
 from .utils import read_uc_table
+
+PolarsTypes = Union[pl.DataFrame, pl.LazyFrame]
 
 
 class DatabricksUnityCatalogInputManager(ConfigurableIOManager):
@@ -64,7 +67,7 @@ class DatabricksUnityCatalogInputManager(ConfigurableIOManager):
     def load_input(
         self,
         context: InputContext,
-    ) -> pl.DataFrame:
+    ) -> PolarsTypes:
         """Read data through a sql warehouse and return it as a polars dataframe"""
         if context.upstream_output is not None:
             upstream_metadata = context.upstream_output.metadata or {}
@@ -94,7 +97,12 @@ class DatabricksUnityCatalogInputManager(ConfigurableIOManager):
 
         query = self.form_query(catalog, schema, table, columns, predicate, partition_predicate)
 
-        return read_uc_table(query, self.token_generator, self.server_hostname, self.endpoint)
+        df = read_uc_table(query, self.token_generator, self.server_hostname, self.endpoint)
+
+        if context.dagster_type.typing_type == pl.LazyFrame:
+            return df.lazy()
+        else:
+            return df
 
     def handle_output(self) -> None:  # type: ignore
         """We're not doing anything here as we only want to read data."""
