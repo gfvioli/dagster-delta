@@ -12,7 +12,7 @@ from pydantic import ConfigDict
 
 from .utils import read_uc_table
 
-PolarsTypes = Union[pl.DataFrame, pl.LazyFrame]
+PolarsTypes = Union[pl.DataFrame, pl.LazyFrame]  # noqa: UP007
 
 
 class DatabricksUnityCatalogInputManager(ConfigurableIOManager):
