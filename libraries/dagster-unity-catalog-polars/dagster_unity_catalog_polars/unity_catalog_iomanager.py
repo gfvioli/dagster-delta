@@ -83,8 +83,8 @@ class DatabricksUnityCatalogInputManager(ConfigurableIOManager):
         predicate = metadata.get("predicate")
         partition_predicate = None
         if context.has_asset_partitions:
-            partitions = context._asset_partitions_subset.subset  # type: ignore
-            if len(partitions) > 1:
+            partitions = context._asset_partitions_subset.get_partition_keys()  # type: ignore
+            if len(partitions) > 1:  # type: ignore
                 partition_predicate = f"{metadata['partition_expr']} in {str(tuple(partitions))}"
             else:
                 partition_predicate = f'{metadata["partition_expr"]} == "{list(partitions)[0]}"'
