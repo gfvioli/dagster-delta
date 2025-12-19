@@ -1,4 +1,5 @@
 import logging
+import re
 from collections.abc import Sequence
 from typing import Optional, Union
 
@@ -90,7 +91,14 @@ class _DeltaLakePolarsTypeHandler(DeltalakeBaseArrowTypeHandler[PolarsTypes]):  
         if predicate is not None:
             query = f"{query} WHERE {predicate}"
 
-        logger.info("using query: %s", query)
+        logger.info(
+            "using query: %s",
+            re.sub(
+                r"\btbl\b",
+                context.asset_key.parts[-1] if context.has_asset_key else "tbl",
+                query,
+            ),
+        )
 
         df = pl.scan_delta(table).sql(query=query, table_name="tbl")
 
