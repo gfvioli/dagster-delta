@@ -15,7 +15,17 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-keywords = ["dagster", "polars", "io manager", "databricks", "unity catalog"]
+keywords = [
+    "dagster",
+    "deltalake",
+    "delta",
+    "datalake",
+    "pyarrow",
+    "polars",
+    "io manager",
+    "databricks",
+    "unity catalog",
+]
 dependencies = ["dagster-delta", "dagster-unity-catalog-polars"]
 
 [tool.uv.workspace]
