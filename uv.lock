@@ -363,6 +363,17 @@ polars = [
     { name = "polars" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "deltalake" },
+    { name = "polars" },
+    { name = "pyarrow" },
+    { name = "pyright" },
+    { name = "pytest", version = "8.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "pytest", version = "9.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "ruff" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "dagster", specifier = ">=1.8,<2.0" },
@@ -371,6 +382,16 @@ requires-dist = [
     { name = "polars", marker = "extra == 'polars'", specifier = ">=1.31.0,<2.0" },
 ]
 provides-extras = ["polars"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "deltalake", specifier = "<=1.2.0" },
+    { name = "polars", specifier = "==1.31.0" },
+    { name = "pyarrow", specifier = "<=18.0.0" },
+    { name = "pyright", specifier = "==1.1.393" },
+    { name = "pytest", specifier = ">=8.3.4" },
+    { name = "ruff", specifier = ">=0.9.5" },
+]
 
 [[package]]
 name = "dagster-delta-repo"
